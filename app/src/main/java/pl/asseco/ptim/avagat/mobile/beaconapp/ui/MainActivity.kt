@@ -1,21 +1,24 @@
-package pl.asseco.ptim.avagat.mobile.beaconapp
+package pl.asseco.ptim.avagat.mobile.beaconapp.ui
 
 import android.content.Context
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.widget.TextView
+import android.widget.ListView
 import android.widget.Toast
+import com.estimote.coresdk.common.config.EstimoteSDK
 import com.estimote.mgmtsdk.connection.api.DeviceConnectionProvider
 import com.estimote.mustard.rx_goodness.rx_requirements_wizard.RequirementsWizardFactory
 import com.estimote.proximity_sdk.api.*
+import pl.asseco.ptim.avagat.mobile.beaconapp.beacons.BeaconsScannManager
+import pl.asseco.ptim.avagat.mobile.beaconapp.R
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var text: TextView
-    private var manager: Manager? = null
+    private var beaconsScannManager: BeaconsScannManager? = null
     var connectionProvider: DeviceConnectionProvider? = null
+    private lateinit var listView: ListView
+    private lateinit var adapter: BeaconListAdapter
 
     private val TAG = MainActivity::class.java.simpleName
     private var proximityObservationHandle: ProximityObserver.Handler? = null
@@ -23,12 +26,13 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        connectionProvider = DeviceConnectionProvider(this)
-        text = findViewById(R.id.textView) as TextView
-        val cloudCredentials = EstimoteCloudCredentials("space-manager-owa", "a4717c8775d24adde02f07b5dead7053")
+
+        connectionProvider = DeviceConnectionProvider(applicationContext)
+        val cloudCredentials = EstimoteCloudCredentials("space-beaconsScannManager-owa", "a4717c8775d24adde02f07b5dead7053")
+        EstimoteSDK.initialize(applicationContext, "space-beaconsScannManager-owa", "a4717c8775d24adde02f07b5dead7053")
         val zoneKey = "firstSon"//getZoneTag(intent) as? String
-        manager = Manager(this)
-        manager!!.discover()
+        beaconsScannManager = BeaconsScannManager(this)
+        beaconsScannManager!!.discover()
         RequirementsWizardFactory.createEstimoteRequirementsWizard().fulfillRequirements(
             this,
             onRequirementsFulfilled = {
@@ -38,8 +42,16 @@ class MainActivity : AppCompatActivity() {
                     { text.text =  "Beacon is now close!"*//*Toast.makeText(this, "Beacon is now close!", Toast.LENGTH_LONG).show()*//* },
                     { text.text = "Beacon is now far!"*//*Toast.makeText(this, "Beacon is now far!", Toast.LENGTH_LONG).show()*//* }*/)
             },
-            onRequirementsMissing = { text.text =  "Unable to start scan. Requirements not fulfilled: ${it.joinToString()}"/*Toast.makeText(this, "Unable to start scan. Requirements not fulfilled: ${it.joinToString()}", Toast.LENGTH_LONG).show()*/ },
-            onError = { text.text =  "Error while checking requirements: ${it.message}"/*Toast.makeText(this, "Error while checking requirements: ${it.message}", Toast.LENGTH_LONG).show()*/ })
+            onRequirementsMissing = { Toast.makeText(this, "Unable to start scan. Requirements not fulfilled: ${it.joinToString()}", Toast.LENGTH_LONG).show() },
+            onError = { Toast.makeText(this, "Error while checking requirements: ${it.message}", Toast.LENGTH_LONG).show() })
+
+        listView = findViewById(R.id.beacon_list)
+        adapter = BeaconListAdapter(this, beaconsScannManager!!.beaconsSetManager)
+        listView.adapter = adapter
+    }
+
+    fun notifyDataSetChanged(){
+        adapter.notifyDataSetChanged()
     }
 
     private fun whenBeaconIsCloseThenTriggerAnAction(key: String,
@@ -48,7 +60,7 @@ class MainActivity : AppCompatActivity() {
         val proximityObserver = ProximityObserverBuilder(applicationContext, cloudCredentials)
             .withTelemetryReportingDisabled()
             .withLowLatencyPowerMode()
-            .onError { text.text =  "Proximity observation error: ${it.message}"/*Toast.makeText(this, "Proximity observation error: ${it.message}", Toast.LENGTH_LONG).show()*/ }
+            .onError { Toast.makeText(this, "Proximity observation error: ${it.message}", Toast.LENGTH_LONG).show() }
             .withAnalyticsReportingDisabled()
             .build()
         val zones: MutableList<ProximityZone> = arrayListOf()
@@ -57,20 +69,16 @@ class MainActivity : AppCompatActivity() {
             zones.add(ProximityZoneBuilder()
                 .forTag(key)
                 .inCustomRange(i.toDouble()*3)
-                .onEnter { text.text = "zone ${i}" }
-                .onExit { text.text = "" }
+                .onEnter {  }
+                .onExit {  }
                 .build())
         }
         proximityObservationHandle = proximityObserver.startObserving(zonesList)
     }
 
-    fun setText(s: String){
-        text.text = s
-    }
-
     override fun onDestroy() {
         connectionProvider!!.destroy()
-        manager!!.destroy()
+        beaconsScannManager!!.destroy()
         super.onDestroy()
     }
 
@@ -79,7 +87,7 @@ class MainActivity : AppCompatActivity() {
         private val BEACON_IDENTIFIER_KEY = "beacon_identifier"
         private val LIGHT_LEVEL_THRESHOLD_KEY = "light_level_threshold"
         private val TEMPERATURE_THRESHOLD_KEY = "temperature_threshold"
-        private val APP_ID_KEY = "space-manager-owa"
+        private val APP_ID_KEY = "space-beaconsScannManager-owa"
         private val APP_TOKEN_KEY = "a4717c8775d24adde02f07b5dead7053"
         private val ZONE_TAG_KEY = "firstSon"
 
