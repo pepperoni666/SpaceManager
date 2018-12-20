@@ -8,12 +8,14 @@ import com.estimote.mgmtsdk.connection.api.DeviceConnectionCallback
 
 class BeaconObject(val device: ConfigurableDevice, val deviceConnection: DeviceConnection?){
 
+    lateinit var name: String
+
     fun destroy() {
         deviceConnection?.close()
         deviceConnection?.destroy()
     }
 
-    init{
+    /*init{
         deviceConnection?.connect(object: DeviceConnectionCallback{
             override fun onConnected() {
                 Log.d("TAGTAG", "++++++++++++++++++++++++++++++++++++++++++++++ Connected")
@@ -28,5 +30,5 @@ class BeaconObject(val device: ConfigurableDevice, val deviceConnection: DeviceC
             }
 
         })
-    }
+    }*/
 }

@@ -10,6 +10,9 @@ import com.estimote.coresdk.common.config.EstimoteSDK
 import com.estimote.mgmtsdk.connection.api.DeviceConnectionProvider
 import com.estimote.mustard.rx_goodness.rx_requirements_wizard.RequirementsWizardFactory
 import com.estimote.proximity_sdk.api.*
+import org.altbeacon.beacon.BeaconConsumer
+import org.altbeacon.beacon.BeaconManager
+import org.altbeacon.beacon.BeaconParser
 import pl.asseco.ptim.avagat.mobile.beaconapp.beacons.BeaconsScannManager
 import pl.asseco.ptim.avagat.mobile.beaconapp.R
 
@@ -23,16 +26,17 @@ class MainActivity : AppCompatActivity() {
     private val TAG = MainActivity::class.java.simpleName
     private var proximityObservationHandle: ProximityObserver.Handler? = null
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         connectionProvider = DeviceConnectionProvider(applicationContext)
-        val cloudCredentials = EstimoteCloudCredentials("space-beaconsScannManager-owa", "a4717c8775d24adde02f07b5dead7053")
-        EstimoteSDK.initialize(applicationContext, "space-beaconsScannManager-owa", "a4717c8775d24adde02f07b5dead7053")
+        val cloudCredentials = EstimoteCloudCredentials("space-manager-owa", "a4717c8775d24adde02f07b5dead7053")
+        EstimoteSDK.initialize(applicationContext, "space-manager-owa", "a4717c8775d24adde02f07b5dead7053")
         val zoneKey = "firstSon"//getZoneTag(intent) as? String
         beaconsScannManager = BeaconsScannManager(this)
-        beaconsScannManager!!.discover()
+        //beaconsScannManager!!.discover()
         RequirementsWizardFactory.createEstimoteRequirementsWizard().fulfillRequirements(
             this,
             onRequirementsFulfilled = {
@@ -48,6 +52,8 @@ class MainActivity : AppCompatActivity() {
         listView = findViewById(R.id.beacon_list)
         adapter = BeaconListAdapter(this, beaconsScannManager!!.beaconsSetManager)
         listView.adapter = adapter
+
+
     }
 
     fun notifyDataSetChanged(){

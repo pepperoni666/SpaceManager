@@ -19,6 +19,7 @@ class BeaconListAdapter(private val context:Context, private val beaconsSetManag
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         // Get view for row item
         val rowView = inflater.inflate(R.layout.beacon_item, parent, false)
+        rowView.findViewById<TextView>(R.id.textView).text = beaconsSetManager.configurableDevices[position].name
         val confDev = beaconsSetManager.configurableDevices
         /*if(confDev[confDev.keys.toList()[position]]?.isConnected == true){
             confDev[confDev.keys.toList()[position]]?.settings?.deviceInfo?.color()?.get(object: SettingCallback<String>{
