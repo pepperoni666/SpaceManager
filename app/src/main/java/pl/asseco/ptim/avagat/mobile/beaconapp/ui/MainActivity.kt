@@ -10,9 +10,6 @@ import com.estimote.coresdk.common.config.EstimoteSDK
 import com.estimote.mgmtsdk.connection.api.DeviceConnectionProvider
 import com.estimote.mustard.rx_goodness.rx_requirements_wizard.RequirementsWizardFactory
 import com.estimote.proximity_sdk.api.*
-import org.altbeacon.beacon.BeaconConsumer
-import org.altbeacon.beacon.BeaconManager
-import org.altbeacon.beacon.BeaconParser
 import pl.asseco.ptim.avagat.mobile.beaconapp.beacons.BeaconsScannManager
 import pl.asseco.ptim.avagat.mobile.beaconapp.R
 
@@ -36,6 +33,7 @@ class MainActivity : AppCompatActivity() {
         EstimoteSDK.initialize(applicationContext, "space-manager-owa", "a4717c8775d24adde02f07b5dead7053")
         val zoneKey = "firstSon"//getZoneTag(intent) as? String
         beaconsScannManager = BeaconsScannManager(this)
+        beaconsScannManager!!.connect()
         //beaconsScannManager!!.discover()
         RequirementsWizardFactory.createEstimoteRequirementsWizard().fulfillRequirements(
             this,

@@ -34,6 +34,7 @@ class BeaconsScannManager(val activity: MainActivity): DeviceConnector{
     fun connect(){
         beaconManager.setRangingListener(object: BeaconManager.BeaconRangingListener{
             override fun onBeaconsDiscovered(beaconRegion: BeaconRegion?, beacons: MutableList<Beacon>?) {
+                Log.d("TAG", "TEST")
             }
         })
         beaconManager.setMonitoringListener(object: BeaconManager.BeaconMonitoringListener{
@@ -47,9 +48,9 @@ class BeaconsScannManager(val activity: MainActivity): DeviceConnector{
         })
         beaconManager.connect(object: BeaconManager.ServiceReadyCallback{
             override fun onServiceReady() {
-                beaconManager.startMonitoring(BeaconRegion("Beacons with default Estimote UUID",
-                    UUID.fromString("b9407f30-f5f8-466e-aff9-25556b57fe6d"), null, null))
-                //beaconManager.startRanging(region)
+                /*beaconManager.startMonitoring(BeaconRegion("Beacons with default Estimote UUID",
+                    UUID.fromString("b9407f30-f5f8-466e-aff9-25556b57fe6d"), null, null))*/
+                beaconManager.startRanging(region)
             }
         })
     }
