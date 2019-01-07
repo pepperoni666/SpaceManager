@@ -1,6 +1,9 @@
 package pl.asseco.ptim.avagat.mobile.beaconapp.beacons
 
+import android.content.Context
 import android.util.Log
+import android.widget.Toast
+import com.estimote.coresdk.recognition.packets.Beacon
 import com.estimote.coresdk.recognition.packets.ConfigurableDevice
 import com.estimote.mgmtsdk.common.exceptions.DeviceConnectionException
 import com.estimote.mgmtsdk.connection.api.DeviceConnection
@@ -10,6 +13,27 @@ import com.estimote.mgmtsdk.feature.settings.SettingCallback
 class BeaconsSetManager (val deviceConnector: DeviceConnector){
     internal val configurableDevices: MutableList<BeaconObject> = mutableListOf()
     private val connectingDevices: MutableList<ConfigurableDevice> = mutableListOf()
+    internal val visibleDevices: MutableList<Beacon> = mutableListOf()
+
+    fun visibleBeaconsSetUpdate(newList: MutableList<Beacon>, context: Context){
+        for(i in newList){
+            if(!visibleDevices.contains(i)) {
+                visibleDevices.add(i)
+                Toast.makeText(context, "New Beacon!", Toast.LENGTH_SHORT).show()
+                Log.d("TAG", "##############Beacon appear")
+            }
+        }
+        deviceConnector.notifyChange()
+        val tmp = visibleDevices.toMutableList()
+        for(i in tmp){
+            if(!newList.contains(i)){
+                visibleDevices.removeAt(visibleDevices.indexOf(i))
+                Toast.makeText(context, "Beacon gone", Toast.LENGTH_LONG).show()
+                Log.d("TAG", "##############Beacon gone")
+            }
+        }
+        deviceConnector.notifyChange()
+    }
 
     fun beaconsSetUpdate(newList: MutableList<ConfigurableDevice>){
         for(i in newList){
@@ -56,6 +80,14 @@ class BeaconsSetManager (val deviceConnector: DeviceConnector){
             configurableDevices[i].destroy()
             configurableDevices.removeAt(i)
         }*/
+    }
+
+    private fun containsVisible(el: Beacon): Boolean{
+        for(i in visibleDevices){
+            if(i.macAddress==el)
+                return true
+        }
+        return false
     }
 
     private fun contains(el: ConfigurableDevice): Boolean{

@@ -19,8 +19,8 @@ class BeaconListAdapter(private val context:Context, private val beaconsSetManag
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         // Get view for row item
         val rowView = inflater.inflate(R.layout.beacon_item, parent, false)
-        rowView.findViewById<TextView>(R.id.textView).text = beaconsSetManager.configurableDevices[position].name
-        val confDev = beaconsSetManager.configurableDevices
+        rowView.findViewById<TextView>(R.id.textView).text = beaconsSetManager.visibleDevices[position].macAddress.toString() + "\n" + beaconsSetManager.visibleDevices[position].major + "\n" + beaconsSetManager.visibleDevices[position].minor
+        //val confDev = beaconsSetManager.configurableDevices
         /*if(confDev[confDev.keys.toList()[position]]?.isConnected == true){
             confDev[confDev.keys.toList()[position]]?.settings?.deviceInfo?.color()?.get(object: SettingCallback<String>{
                 override fun onSuccess(value: String?) {
@@ -38,7 +38,7 @@ class BeaconListAdapter(private val context:Context, private val beaconsSetManag
     }
 
     override fun getItem(position: Int): Any {
-        return beaconsSetManager.configurableDevices[position]
+        return beaconsSetManager.visibleDevices[position]
     }
 
     override fun getItemId(position: Int): Long {
@@ -46,7 +46,7 @@ class BeaconListAdapter(private val context:Context, private val beaconsSetManag
     }
 
     override fun getCount(): Int {
-        return beaconsSetManager.configurableDevices.size
+        return beaconsSetManager.visibleDevices.size
     }
 
 }

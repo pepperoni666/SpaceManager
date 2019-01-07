@@ -25,7 +25,6 @@ class BeaconsScannManager(val activity: MainActivity): DeviceConnector{
     private val beaconManager: BeaconManager = BeaconManager(activity.applicationContext)
 
     private val region: BeaconRegion = BeaconRegion("rid", null, null, null)
-
     //private var devaiceConnection: DeviceConnection? = null
     public var isProviderConnected: Boolean = false
     internal val beaconsSetManager: BeaconsSetManager =
@@ -34,7 +33,7 @@ class BeaconsScannManager(val activity: MainActivity): DeviceConnector{
     fun connect(){
         beaconManager.setRangingListener(object: BeaconManager.BeaconRangingListener{
             override fun onBeaconsDiscovered(beaconRegion: BeaconRegion?, beacons: MutableList<Beacon>?) {
-                Log.d("TAG", "TEST")
+                this@BeaconsScannManager.beaconsSetManager.visibleBeaconsSetUpdate(beacons!!, activity.applicationContext)
             }
         })
         beaconManager.setMonitoringListener(object: BeaconManager.BeaconMonitoringListener{
@@ -46,8 +45,11 @@ class BeaconsScannManager(val activity: MainActivity): DeviceConnector{
                 beaconManager.stopRanging(beaconRegion)
             }
         })
+        beaconManager.setBackgroundScanPeriod(500, 0)
+        beaconManager.setForegroundScanPeriod(500, 0)
         beaconManager.connect(object: BeaconManager.ServiceReadyCallback{
             override fun onServiceReady() {
+                //beaconManager.startMonitoring(region)
                 /*beaconManager.startMonitoring(BeaconRegion("Beacons with default Estimote UUID",
                     UUID.fromString("b9407f30-f5f8-466e-aff9-25556b57fe6d"), null, null))*/
                 beaconManager.startRanging(region)
