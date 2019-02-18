@@ -19,7 +19,13 @@ class BeaconListAdapter(private val context:Context, private val beaconsSetManag
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         // Get view for row item
         val rowView = inflater.inflate(R.layout.beacon_item, parent, false)
-        rowView.findViewById<TextView>(R.id.textView).text = beaconsSetManager.visibleDevices[position].macAddress.toString() + "\n" + beaconsSetManager.visibleDevices[position].major + "\n" + beaconsSetManager.visibleDevices[position].minor
+        rowView.findViewById<TextView>(R.id.textView).text =
+                beaconsSetManager.visibleDevices[position].macAddress.toString() + "\n" +
+                beaconsSetManager.visibleDevices[position].proximityUUID + "\n" +
+                beaconsSetManager.visibleDevices[position].major + "\n" +
+                beaconsSetManager.visibleDevices[position].minor + "\n" +
+                beaconsSetManager.visibleDevices[position].rssi + "\n" +
+                beaconsSetManager.visibleDevices[position].measuredPower
         //val confDev = beaconsSetManager.configurableDevices
         /*if(confDev[confDev.keys.toList()[position]]?.isConnected == true){
             confDev[confDev.keys.toList()[position]]?.settings?.deviceInfo?.color()?.get(object: SettingCallback<String>{

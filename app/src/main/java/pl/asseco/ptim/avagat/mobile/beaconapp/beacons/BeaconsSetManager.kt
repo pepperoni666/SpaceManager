@@ -15,20 +15,32 @@ class BeaconsSetManager (val deviceConnector: DeviceConnector){
     private val connectingDevices: MutableList<ConfigurableDevice> = mutableListOf()
     internal val visibleDevices: MutableList<Beacon> = mutableListOf()
 
+    fun getMinorById(id: String): String{
+        for(b in visibleDevices){
+            if(("" + b.proximityUUID) == id){
+                return b.minor.toString()
+            }
+        }
+        return ""
+    }
+
     fun visibleBeaconsSetUpdate(newList: MutableList<Beacon>, context: Context){
         for(i in newList){
             if(!visibleDevices.contains(i)) {
-                visibleDevices.add(i)
-                Toast.makeText(context, "New Beacon!", Toast.LENGTH_SHORT).show()
+                //Toast.makeText(context, "New Beacon!", Toast.LENGTH_SHORT).show()
                 Log.d("TAG", "##############Beacon appear")
             }
+            else{
+                visibleDevices.removeAt(visibleDevices.indexOf(i))
+            }
+            visibleDevices.add(i)
         }
         deviceConnector.notifyChange()
         val tmp = visibleDevices.toMutableList()
         for(i in tmp){
             if(!newList.contains(i)){
                 visibleDevices.removeAt(visibleDevices.indexOf(i))
-                Toast.makeText(context, "Beacon gone", Toast.LENGTH_LONG).show()
+                //Toast.makeText(context, "Beacon gone", Toast.LENGTH_LONG).show()
                 Log.d("TAG", "##############Beacon gone")
             }
         }

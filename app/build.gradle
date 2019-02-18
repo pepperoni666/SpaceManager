@@ -37,4 +37,5 @@ dependencies {
 
     implementation 'com.estimote:sdk:1.4.5'
     implementation 'com.estimote:mustard:0.2.1'
+    implementation 'com.google.android.gms:play-services-awareness:16.0.0'
 }

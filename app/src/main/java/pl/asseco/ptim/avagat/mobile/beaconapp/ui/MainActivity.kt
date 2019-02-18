@@ -1,17 +1,31 @@
 package pl.asseco.ptim.avagat.mobile.beaconapp.ui
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
 import android.widget.ListView
 import android.widget.Toast
 import com.estimote.coresdk.common.config.EstimoteSDK
 import com.estimote.mgmtsdk.connection.api.DeviceConnectionProvider
 import com.estimote.mustard.rx_goodness.rx_requirements_wizard.RequirementsWizardFactory
 import com.estimote.proximity_sdk.api.*
+import com.google.android.gms.awareness.Awareness
+import com.google.android.gms.awareness.state.BeaconState
+import com.google.android.gms.common.api.GoogleApiClient
 import pl.asseco.ptim.avagat.mobile.beaconapp.beacons.BeaconsScannManager
+import com.google.android.gms.location.places.ui.PlaceAutocomplete.getStatus
+import com.google.android.gms.awareness.snapshot.BeaconStateResult
+import android.support.annotation.NonNull
+import android.support.v4.app.FragmentActivity
+import android.util.Log
+import com.google.android.gms.common.api.ResultCallback
 import pl.asseco.ptim.avagat.mobile.beaconapp.R
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -20,18 +34,57 @@ class MainActivity : AppCompatActivity() {
     private lateinit var listView: ListView
     private lateinit var adapter: BeaconListAdapter
 
+    val MY_PERMISSION_LOCATION: Int = 1
+    val MY_PERMISSION_BLUETOOTH: Int = 1
+
     private val TAG = MainActivity::class.java.simpleName
     private var proximityObservationHandle: ProximityObserver.Handler? = null
+
+    val BEACON_TYPE_FILTERS: List<BeaconState.TypeFilter> = listOf(
+        BeaconState.TypeFilter.with("spacemanager", "void")
+    )
+
+    lateinit var client: GoogleApiClient
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(pl.asseco.ptim.avagat.mobile.beaconapp.R.layout.activity_main)
+
+        client = GoogleApiClient.Builder(applicationContext)
+            .addApi(Awareness.API)
+            .build()
+
+        client.connect()
+
+        if (ContextCompat.checkSelfPermission(
+                applicationContext,
+                Manifest.permission.ACCESS_FINE_LOCATION) !=
+            PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                MY_PERMISSION_LOCATION
+            )
+            return
+        }
+
+        if (ContextCompat.checkSelfPermission(
+                applicationContext,
+                Manifest.permission.BLUETOOTH) !=
+            PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.BLUETOOTH),
+                MY_PERMISSION_BLUETOOTH
+            )
+            return
+        }
 
         connectionProvider = DeviceConnectionProvider(applicationContext)
         val cloudCredentials = EstimoteCloudCredentials("space-manager-owa", "a4717c8775d24adde02f07b5dead7053")
         EstimoteSDK.initialize(applicationContext, "space-manager-owa", "a4717c8775d24adde02f07b5dead7053")
-        val zoneKey = "firstSon"//getZoneTag(intent) as? String
+        val zoneKey  = listOf("3.1", "3.2","3.3")//getZoneTag(intent) as? String
         beaconsScannManager = BeaconsScannManager(this)
         beaconsScannManager!!.connect()
         //beaconsScannManager!!.discover()
@@ -58,7 +111,7 @@ class MainActivity : AppCompatActivity() {
         adapter.notifyDataSetChanged()
     }
 
-    private fun whenBeaconIsCloseThenTriggerAnAction(key: String,
+    private fun whenBeaconIsCloseThenTriggerAnAction(keys: List<String>,
                                                      cloudCredentials: EstimoteCloudCredentials
                                                      /*actionToTriggerWhenBeaconComesClose: (ProximityZoneContext) -> Unit*/) {
         val proximityObserver = ProximityObserverBuilder(applicationContext, cloudCredentials)
@@ -67,20 +120,24 @@ class MainActivity : AppCompatActivity() {
             .onError { Toast.makeText(this, "Proximity observation error: ${it.message}", Toast.LENGTH_LONG).show() }
             .withAnalyticsReportingDisabled()
             .build()
-        val zones: MutableList<ProximityZone> = arrayListOf()
-        val zonesList: List<ProximityZone> = zones
-        for( i in 1..5){
-            zones.add(ProximityZoneBuilder()
-                .forTag(key)
-                .inCustomRange(i.toDouble()*3)
-                .onEnter {  }
-                .onExit {  }
+        val zonesList: MutableList<ProximityZone> = mutableListOf()
+        for(z in keys){
+            zonesList.add(ProximityZoneBuilder()
+                .forTag(z)
+                .inNearRange()
+                .onEnter {
+                    Toast.makeText(this, "Beacon close: ${it.tag}", Toast.LENGTH_LONG).show()
+                }
+                .onExit {
+                    Toast.makeText(this, "Beacon far: ${it.tag}", Toast.LENGTH_LONG).show()
+                }
                 .build())
         }
         proximityObservationHandle = proximityObserver.startObserving(zonesList)
     }
 
     override fun onDestroy() {
+        proximityObservationHandle?.stop()
         connectionProvider!!.destroy()
         beaconsScannManager!!.destroy()
         super.onDestroy()

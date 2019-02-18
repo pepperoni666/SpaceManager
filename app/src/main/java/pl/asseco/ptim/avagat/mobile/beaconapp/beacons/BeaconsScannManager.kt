@@ -1,5 +1,6 @@
 package pl.asseco.ptim.avagat.mobile.beaconapp.beacons
 
+import android.support.annotation.NonNull
 import android.util.Log
 import com.estimote.coresdk.observation.region.beacon.BeaconRegion
 import com.estimote.coresdk.recognition.packets.Beacon
@@ -9,6 +10,9 @@ import com.estimote.mgmtsdk.common.exceptions.DeviceConnectionException
 import com.estimote.mgmtsdk.connection.api.DeviceConnection
 import com.estimote.mgmtsdk.connection.api.DeviceConnectionCallback
 import com.estimote.mgmtsdk.connection.api.DeviceConnectionProvider
+import com.google.android.gms.awareness.Awareness
+import com.google.android.gms.awareness.snapshot.BeaconStateResult
+import com.google.android.gms.common.api.ResultCallback
 import java.util.*
 import pl.asseco.ptim.avagat.mobile.beaconapp.ui.MainActivity
 
@@ -34,6 +38,17 @@ class BeaconsScannManager(val activity: MainActivity): DeviceConnector{
         beaconManager.setRangingListener(object: BeaconManager.BeaconRangingListener{
             override fun onBeaconsDiscovered(beaconRegion: BeaconRegion?, beacons: MutableList<Beacon>?) {
                 this@BeaconsScannManager.beaconsSetManager.visibleBeaconsSetUpdate(beacons!!, activity.applicationContext)
+                Awareness.SnapshotApi.getBeaconState(activity.client, activity.BEACON_TYPE_FILTERS)
+                    .setResultCallback(object : ResultCallback<BeaconStateResult> {
+                        override fun onResult(@NonNull beaconStateResult: BeaconStateResult) {
+                            if (!beaconStateResult.status.isSuccess) {
+                                Log.e("TAG", "Could not get beacon state.")
+                                return
+                            }
+                            val beaconState = beaconStateResult.beaconState
+                            beaconState?.beaconInfo
+                        }
+                    })
             }
         })
         beaconManager.setMonitoringListener(object: BeaconManager.BeaconMonitoringListener{
