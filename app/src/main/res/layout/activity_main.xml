@@ -6,11 +6,24 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.MainActivity">
+
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/beacon_state_btn"
+            android:text="beacon state"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/beacon_list" app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
     <ListView
-            app:layout_constraintTop_toTopOf="parent" app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="2dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="1dp"
             app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="2dp" android:layout_marginTop="2dp" android:layout_height="0dp"
-            android:layout_width="0dp" android:layout_marginEnd="6dp" android:id="@+id/beacon_list"/>
+            android:layout_width="0dp" android:layout_marginEnd="6dp" android:id="@+id/beacon_list"
+            app:layout_constraintHorizontal_bias="0.0" app:layout_constraintVertical_bias="1.0"
+            app:layout_constraintTop_toBottomOf="@+id/beacon_state_btn"/>
 
 </android.support.constraint.ConstraintLayout>

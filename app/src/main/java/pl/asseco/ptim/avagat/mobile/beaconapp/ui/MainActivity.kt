@@ -23,6 +23,9 @@ import com.google.android.gms.awareness.snapshot.BeaconStateResult
 import android.support.annotation.NonNull
 import android.support.v4.app.FragmentActivity
 import android.util.Log
+import android.view.KeyEvent
+import android.view.View
+import android.widget.Button
 import com.google.android.gms.common.api.ResultCallback
 import pl.asseco.ptim.avagat.mobile.beaconapp.R
 
@@ -35,13 +38,13 @@ class MainActivity : AppCompatActivity() {
     private lateinit var adapter: BeaconListAdapter
 
     val MY_PERMISSION_LOCATION: Int = 1
-    val MY_PERMISSION_BLUETOOTH: Int = 1
+    val MY_PERMISSION_BLUETOOTH: Int = 2
 
     private val TAG = MainActivity::class.java.simpleName
     private var proximityObservationHandle: ProximityObserver.Handler? = null
 
     val BEACON_TYPE_FILTERS: List<BeaconState.TypeFilter> = listOf(
-        BeaconState.TypeFilter.with("spacemanager", "void")
+        BeaconState.TypeFilter.with("spacemanager", "spacemanager/")
     )
 
     lateinit var client: GoogleApiClient
@@ -81,10 +84,26 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
+        val b: Button = findViewById(R.id.beacon_state_btn)
+
+        b.setOnClickListener {
+            Awareness.SnapshotApi.getBeaconState(client, BEACON_TYPE_FILTERS)
+                .setResultCallback(object : ResultCallback<BeaconStateResult> {
+                    override fun onResult(@NonNull beaconStateResult: BeaconStateResult) {
+                        if (!beaconStateResult.status.isSuccess) {
+                            Log.e("TAG", "Could not get beacon state.")
+                            return
+                        }
+                        val beaconState = beaconStateResult.beaconState
+                        beaconState?.beaconInfo
+                    }
+                })
+        }
+
         connectionProvider = DeviceConnectionProvider(applicationContext)
         val cloudCredentials = EstimoteCloudCredentials("space-manager-owa", "a4717c8775d24adde02f07b5dead7053")
         EstimoteSDK.initialize(applicationContext, "space-manager-owa", "a4717c8775d24adde02f07b5dead7053")
-        val zoneKey  = listOf("3.1", "3.2","3.3")//getZoneTag(intent) as? String
+        val zoneKey  = listOf("3.1", "3.2","3.3", "firstSon")//getZoneTag(intent) as? String
         beaconsScannManager = BeaconsScannManager(this)
         beaconsScannManager!!.connect()
         //beaconsScannManager!!.discover()

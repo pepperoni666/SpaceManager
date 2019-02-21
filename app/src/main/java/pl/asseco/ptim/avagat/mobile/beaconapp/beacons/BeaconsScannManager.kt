@@ -38,17 +38,6 @@ class BeaconsScannManager(val activity: MainActivity): DeviceConnector{
         beaconManager.setRangingListener(object: BeaconManager.BeaconRangingListener{
             override fun onBeaconsDiscovered(beaconRegion: BeaconRegion?, beacons: MutableList<Beacon>?) {
                 this@BeaconsScannManager.beaconsSetManager.visibleBeaconsSetUpdate(beacons!!, activity.applicationContext)
-                Awareness.SnapshotApi.getBeaconState(activity.client, activity.BEACON_TYPE_FILTERS)
-                    .setResultCallback(object : ResultCallback<BeaconStateResult> {
-                        override fun onResult(@NonNull beaconStateResult: BeaconStateResult) {
-                            if (!beaconStateResult.status.isSuccess) {
-                                Log.e("TAG", "Could not get beacon state.")
-                                return
-                            }
-                            val beaconState = beaconStateResult.beaconState
-                            beaconState?.beaconInfo
-                        }
-                    })
             }
         })
         beaconManager.setMonitoringListener(object: BeaconManager.BeaconMonitoringListener{
