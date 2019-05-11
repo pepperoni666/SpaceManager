@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/beacon_item_dialog_text_name"
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"
+            android:text="@string/beacon_item_dialog_text_name"
+            android:hint="@string/beacon_item_dialog_text_name"
+            android:textStyle="bold"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"/>
+
+        <EditText
+            android:id="@+id/beacon_item_dialog_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:text="" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/beacon_item_dialog_text_mac"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/beacon_item_dialog_text_mac"
+            android:textStyle="bold"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"/>
+
+        <TextView
+            android:id="@+id/beacon_item_dialog_mac"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/beacon_item_dialog_text_uuid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/beacon_item_dialog_text_uuid"
+            android:textStyle="bold"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"/>
+
+        <TextView
+            android:id="@+id/beacon_item_dialog_uuid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/beacon_item_dialog_text_major"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/beacon_item_dialog_text_major"
+            android:textStyle="bold"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"/>
+
+        <TextView
+            android:id="@+id/beacon_item_dialog_major"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"/>
+
+        <TextView
+            android:id="@+id/beacon_item_dialog_text_minor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/beacon_item_dialog_text_minor"
+            android:textStyle="bold"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"/>
+
+        <TextView
+            android:id="@+id/beacon_item_dialog_minor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/beacon_item_dialog_rssi_"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/beacon_item_dialog_text_rssi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/beacon_item_dialog_text_rssi"
+            android:textStyle="bold"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"/>
+
+        <TextView
+            android:id="@+id/beacon_item_dialog_rssi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:textColor="#0033cc"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/beacon_item_dialog_calibrated"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/beacon_item_dialog_text_calibrated_rssi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/beacon_item_dialog_text_calibrated_rssi"
+            android:textStyle="bold"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"/>
+
+        <TextView
+            android:id="@+id/beacon_item_dialog_calibrated_rssi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"/>
+
+        <EditText
+            android:id="@+id/beacon_item_dialog_calibrated_rssi_editable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:visibility="gone"
+            android:inputType="numberDecimal"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/beacon_item_dialog_calibrating"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/beacon_item_dialog_text_calibrating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/beacon_item_dialog_text_calibrating"
+            android:textStyle="bold"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"/>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/beacon_item_dialog_calibrating_timer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAlignment="viewEnd"
+            android:text=""
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"/>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/beacon_item_dialog_calibrate_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/beacon_item_dialog_calibrate_btn"/>
+
+    <Button
+        android:id="@+id/beacon_item_dialog_cancel_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:text="@string/beacon_item_dialog_cancel_btn"/>
+
+</LinearLayout>

@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">Space Manager</string>
+    <string name="settings">Settings</string>
+    <string name="all_beacons">All beacons</string>
+    <string name="saved_beacons">Saved beacons</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="beacon_item_dialog_calibrate_btn">calibrate</string>
+    <string name="beacon_item_dialog_cancel_btn">cancel</string>
+    <string name="beacon_item_dialog_text_calibrating">calibrating...</string>
+    <string name="beacon_item_dialog_text_calibrated_rssi">calibrated RSSI</string>
+    <string name="beacon_item_dialog_text_rssi">RSSI</string>
+    <string name="beacon_item_dialog_text_minor">minor</string>
+    <string name="beacon_item_dialog_text_major">mijor</string>
+    <string name="beacon_item_dialog_text_uuid">UUID</string>
+    <string name="beacon_item_dialog_text_mac">mac</string>
+    <string name="beacon_item_dialog_text_name">Name</string>
 </resources>
