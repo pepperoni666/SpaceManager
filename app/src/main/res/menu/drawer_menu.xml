@@ -5,15 +5,29 @@
 
     <item
         android:id="@+id/nav_all_beacons"
+        android:icon="@drawable/ic_all"
         android:title="@string/all_beacons" />
 
     <item
         android:id="@+id/nav_saved_beacons"
+        android:icon="@drawable/ic_saved"
         android:title="@string/saved_beacons" />
 
     <item
         android:id="@+id/nav_settings"
+        android:icon="@drawable/ic_settings"
         android:title="@string/settings" />
+
+    <item
+        android:id="@+id/nav_stop"
+        android:icon="@drawable/ic_stop"
+        android:title="@string/stop_beacon_scanning" />
+
+    <item
+        android:id="@+id/nav_run"
+        android:icon="@drawable/ic_run"
+        android:visible="false"
+        android:title="@string/run_beacon_scanning" />
 
 
 </menu>

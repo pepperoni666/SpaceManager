@@ -15,4 +15,6 @@
     <string name="beacon_item_dialog_text_uuid">UUID</string>
     <string name="beacon_item_dialog_text_mac">mac</string>
     <string name="beacon_item_dialog_text_name">Name</string>
+    <string name="stop_beacon_scanning">Stop beacon scanning</string>
+    <string name="run_beacon_scanning">Run beacon scanning</string>
 </resources>

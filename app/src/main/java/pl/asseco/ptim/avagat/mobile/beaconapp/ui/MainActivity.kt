@@ -1,6 +1,7 @@
 package pl.asseco.ptim.avagat.mobile.beaconapp.ui
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -13,10 +14,14 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import pl.asseco.ptim.avagat.mobile.beaconapp.R
+import pl.asseco.ptim.avagat.mobile.beaconapp.SMApp
+import pl.asseco.ptim.avagat.mobile.beaconapp.utils.ExitListener
+import pl.asseco.ptim.avagat.mobile.beaconapp.utils.Logger
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     private lateinit var drawer: DrawerLayout
+    private lateinit var navigationBiew: NavigationView
 
     val MY_PERMITION: Int = 1
 
@@ -30,7 +35,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
 
-        val navigationBiew: NavigationView = findViewById(R.id.nav_view)
+        navigationBiew = findViewById(R.id.nav_view)
         navigationBiew.setNavigationItemSelectedListener(this)
 
         val toggle: ActionBarDrawerToggle = ActionBarDrawerToggle(
@@ -43,9 +48,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         drawer.addDrawerListener(toggle)
         toggle.syncState()
 
-        if(savedInstanceState == null) {
+        if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction().replace(R.id.fragment_container, BeaconListFragment()).commit()
             navigationBiew.setCheckedItem(R.id.nav_all_beacons)
+        }
+
+        if(!(application as SMApp).beaconScanner.running){
+            navigationBiew.menu.findItem(R.id.nav_run).setVisible(true)
+            navigationBiew.menu.findItem(R.id.nav_stop).setVisible(false)
         }
 
         if (ContextCompat.checkSelfPermission(
@@ -89,20 +99,36 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             )
             return
         }
+
+        startService(Intent(this, ExitListener::class.java))
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
+        when (item.itemId) {
             R.id.nav_all_beacons -> {
-                supportFragmentManager.beginTransaction().replace(R.id.fragment_container, BeaconListFragment()).commit()
+                supportFragmentManager.beginTransaction().replace(R.id.fragment_container, BeaconListFragment())
+                    .commit()
+                Logger.log("AllBeacons-fragment selected")
             }
             R.id.nav_saved_beacons -> {
                 //supportFragmentManager.beginTransaction().replace(R.id.fragment_container, BeaconListFragment()).commit()
+                //Logger.log("SavedBeacons-fragment selected")
             }
             R.id.nav_settings -> {
-
+                //Logger.log("SavedBeacons-fragment selected")
             }
-            else -> { }
+            R.id.nav_stop -> {
+                navigationBiew.menu.findItem(R.id.nav_run).setVisible(true)
+                item.setVisible(false)
+                (application as SMApp).beaconScanner.stop()
+            }
+            R.id.nav_run -> {
+                navigationBiew.menu.findItem(R.id.nav_stop).setVisible(true)
+                item.setVisible(false)
+                (application as SMApp).beaconScanner.start()
+            }
+            else -> {
+            }
         }
 
         drawer.closeDrawer(GravityCompat.START)
@@ -116,6 +142,4 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             super.onBackPressed()
         }
     }
-
-
 }

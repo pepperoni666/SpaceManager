@@ -78,9 +78,11 @@ class BeaconItemDialogHolder {
     }
 
     fun stopCalibrating() {
-        calibrating.visibility = View.GONE
-        beacon_item_dialog_calibrate_btn.visibility = View.VISIBLE
-        beacon_item_dialog_cancel_btn.visibility = View.GONE
+        if(beacon_item_dialog_cancel_btn.visibility == View.VISIBLE){
+            calibrating.visibility = View.GONE
+            beacon_item_dialog_calibrate_btn.visibility = View.VISIBLE
+            beacon_item_dialog_cancel_btn.visibility = View.GONE
+        }
     }
 
     fun timerTick(t: Int) {

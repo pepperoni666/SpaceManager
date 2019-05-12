@@ -18,30 +18,26 @@ import pl.asseco.ptim.avagat.mobile.beaconapp.ui.beacon_list.BeaconListAdapter
 class BeaconListFragment : Fragment(), SMApp.CurentFragment, BeaconItemDialog.BeaconDialogCallback {
     override fun deleteSelected() {
         if((activity!!.application as SMApp).beaconScanner.savedBeacons.contains(selectedBeacon!!)) {
-            (activity!!.application as SMApp).beaconScanner.beaconList[(activity!!.application as SMApp).beaconScanner.beaconList.indexOf(selectedBeacon!!)].removeBeacon()
+            (activity!!.application as SMApp).deleteBeacon(selectedBeacon!!)
         }
-        (activity!!.application as SMApp).beaconScanner.savedBeacons.remove(selectedBeacon!!)
         adapter.notifyDataSetChanged()
         dialog?.dismiss()
         selectedBeacon = null
         dialog = null
-        //saveBeaconDataTOMqtt()
-        //TODO: save changes
     }
 
     override fun saveBeacon(name: String, rssi: Double) {
-        dialog?.dismiss()
-        dialog = null
-        if ((activity!!.application as SMApp).beaconScanner.savedBeacons.contains(selectedBeacon))
-            (activity!!.application as SMApp).beaconScanner.savedBeacons.get((activity!!.application as SMApp).beaconScanner.savedBeacons.indexOf(selectedBeacon)).saveBeacon(name, rssi)
+        selectedBeacon?.saveBeacon(name, rssi)
+        if ((activity!!.application as SMApp).beaconScanner.savedBeacons.contains(selectedBeacon)) {
+            (activity!!.application as SMApp).updateBeacon(selectedBeacon!!)
+        }
         else {
-            selectedBeacon?.saveBeacon(name, rssi)
-            (activity!!.application as SMApp).beaconScanner.savedBeacons.add(selectedBeacon!!)
+            (activity!!.application as SMApp).saveBeacon(selectedBeacon!!)
         }
         selectedBeacon = null
+        dialog?.dismiss()
+        dialog = null
         adapter.notifyDataSetChanged()
-        //saveBeaconDataTOMqtt()
-        //TODO: save changes
     }
 
     override fun startCalibrating() {
