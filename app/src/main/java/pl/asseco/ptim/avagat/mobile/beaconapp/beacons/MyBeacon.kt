@@ -16,6 +16,8 @@ class MyBeacon: Beacon {
     private var P = 1.0
 
     var isClose = false
+    var actionTagIn: String? = null
+    var actionTagOut: String? = null
 
     constructor(mac: String, uuid: String, major: String, minor: String):
         super(
@@ -30,7 +32,7 @@ class MyBeacon: Beacon {
 
     fun isExpired(): Boolean {
         emptyScanCount++
-        return if (emptyScanCount == 20) true else false
+        return if (emptyScanCount == 10) true else false
     }
 
     fun saveBeacon(name: String, rssi: Double) {

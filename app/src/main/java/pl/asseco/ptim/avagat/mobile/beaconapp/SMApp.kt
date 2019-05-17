@@ -6,12 +6,17 @@ import android.content.Intent
 import android.support.v4.app.Fragment
 import pl.asseco.ptim.avagat.mobile.beaconapp.beacons.BeaconScanner
 import pl.asseco.ptim.avagat.mobile.beaconapp.beacons.MyBeacon
-import pl.asseco.ptim.avagat.mobile.beaconapp.utils.DatabaseHandler
-import pl.asseco.ptim.avagat.mobile.beaconapp.utils.ExitListener
-import pl.asseco.ptim.avagat.mobile.beaconapp.utils.Logger
-import pl.asseco.ptim.avagat.mobile.beaconapp.utils.SMNotificationManager
+import pl.asseco.ptim.avagat.mobile.beaconapp.utils.*
 
 class SMApp : Application(), BeaconScanner.SMAppController {
+    override fun beaconStateChange(beacon: MyBeacon) {
+        if(beacon.isClose){
+            actions.stateChangedAction(beacon.actionTagIn)
+        }
+        else{
+            actions.stateChangedAction(beacon.actionTagOut)
+        }
+    }
 
     interface CurentFragment {
         fun notifyDatasetChanged()
@@ -23,12 +28,14 @@ class SMApp : Application(), BeaconScanner.SMAppController {
     private lateinit var database: DatabaseHandler
     override val context: Context = this
     var curentFragment: CurentFragment? = null
+    private lateinit var actions: Actions
 
     override fun onCreate() {
         super.onCreate()
         database = DatabaseHandler(this)
         smNotificationManager = SMNotificationManager(this)
         beaconScanner = BeaconScanner(this)
+        actions = Actions(this)
         Logger.log("Application start")
     }
 

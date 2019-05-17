@@ -18,6 +18,7 @@ class BeaconScanner(private val smAppController: SMAppController): Service(), Be
         val context: Context
         fun getSavedBeacons(): MutableList<MyBeacon>
         fun notifyDatasetChanged()
+        fun beaconStateChange(beacon: MyBeacon)
     }
 
     private val beaconManager:BeaconManager = BeaconManager.getInstanceForApplication(smAppController.context)
@@ -65,15 +66,24 @@ class BeaconScanner(private val smAppController: SMAppController): Service(), Be
                     if (!beaconList.contains(b)) {
                         beaconList.add(b)
                     }
+                    var wasClose = false
 
                     if (savedBeacons.contains(b)) {
                         beaconList[beaconList.indexOf(b)].saveBeacon(
                             savedBeacons[savedBeacons.indexOf(b)].name,
                             savedBeacons[savedBeacons.indexOf(b)].calibratedRssi
                         )
+                        wasClose = beaconList[beaconList.indexOf(b)].isClose
                     }
 
                     beaconList[beaconList.indexOf(b)].updateBeacon(b)
+
+                    if(savedBeacons.contains(b)) {
+                        val isClose = beaconList[beaconList.indexOf(b)].isClose
+                        if(wasClose != isClose){
+                            smAppController.beaconStateChange(beaconList[beaconList.indexOf(b)])
+                        }
+                    }
 
                 }
             smAppController.notifyDatasetChanged()

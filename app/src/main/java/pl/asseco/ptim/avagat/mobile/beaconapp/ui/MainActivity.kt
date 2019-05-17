@@ -22,6 +22,7 @@ import pl.asseco.ptim.avagat.mobile.beaconapp.utils.Logger
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     private lateinit var drawer: DrawerLayout
     private lateinit var navigationBiew: NavigationView
+    private lateinit var toolbar: Toolbar
 
     val MY_PERMITION: Int = 1
 
@@ -32,7 +33,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         drawer = findViewById(R.id.drawer_layout)
-        val toolbar: Toolbar = findViewById(R.id.toolbar)
+        toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
 
         navigationBiew = findViewById(R.id.nav_view)
@@ -51,6 +52,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction().replace(R.id.fragment_container, BeaconListFragment()).commit()
             navigationBiew.setCheckedItem(R.id.nav_all_beacons)
+            toolbar.title = getString(R.string.all_beacons)
         }
 
         if(!(application as SMApp).beaconScanner.running){
@@ -109,10 +111,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 supportFragmentManager.beginTransaction().replace(R.id.fragment_container, BeaconListFragment())
                     .commit()
                 Logger.log("AllBeacons-fragment selected")
+                toolbar.title = getString(R.string.all_beacons)
             }
             R.id.nav_saved_beacons -> {
-                //supportFragmentManager.beginTransaction().replace(R.id.fragment_container, BeaconListFragment()).commit()
-                //Logger.log("SavedBeacons-fragment selected")
+                supportFragmentManager.beginTransaction().replace(R.id.fragment_container, SavedBeaconListFragment()).commit()
+                Logger.log("SavedBeacons-fragment selected")
+                toolbar.title = getString(R.string.saved_beacons)
             }
             R.id.nav_settings -> {
                 //Logger.log("SavedBeacons-fragment selected")
