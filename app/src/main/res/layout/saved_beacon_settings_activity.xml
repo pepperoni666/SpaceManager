@@ -5,12 +5,40 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:padding="8dp"
     tools:context=".ui.SavedBeaconSettingsActivity">
 
     <TextView
-        android:id="@+id/saved_beacon_settings_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello"/>
+        android:textSize="20sp"
+        android:layout_marginTop="40dp"
+        android:text="@string/action_on_beacon_entering_close_distance"/>
+
+    <Spinner
+        android:id="@+id/saved_beacon_settings_in_spinner"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="15dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:layout_marginTop="40dp"
+        android:text="@string/action_on_beacon_exiting_close_distance"/>
+
+    <Spinner
+        android:id="@+id/saved_beacon_settings_out_spinner"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="15dp"/>
+
+    <Button
+        android:id="@+id/saved_beacon_settings_save_btn"
+        android:layout_width="118dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="@string/save" />
 
 </LinearLayout>

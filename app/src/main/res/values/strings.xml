@@ -17,4 +17,7 @@
     <string name="beacon_item_dialog_text_name">Name</string>
     <string name="stop_beacon_scanning">Stop beacon scanning</string>
     <string name="run_beacon_scanning">Run beacon scanning</string>
+    <string name="action_on_beacon_entering_close_distance">Action on beacon entering close distance:</string>
+    <string name="action_on_beacon_exiting_close_distance">Action on beacon exiting close distance:</string>
+    <string name="save">save</string>
 </resources>
