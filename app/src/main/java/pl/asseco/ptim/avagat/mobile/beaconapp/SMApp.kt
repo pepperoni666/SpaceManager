@@ -33,6 +33,7 @@ class SMApp : Application(), BeaconScanner.SMAppController {
     override fun onCreate() {
         super.onCreate()
         database = DatabaseHandler(this)
+        //database.clearDatabase()
         smNotificationManager = SMNotificationManager(this)
         beaconScanner = BeaconScanner(this)
         actions = Actions(this)
@@ -63,7 +64,7 @@ class SMApp : Application(), BeaconScanner.SMAppController {
     fun updateBeacon(beacon: MyBeacon){
         Logger.log("Updating beacon " + beaconScanner.savedBeacons[beaconScanner.savedBeacons.indexOf(beacon)].name + ", to " + beacon.name)
         database.updateBeacon(beacon)
-        beaconScanner.savedBeacons[beaconScanner.savedBeacons.indexOf(beacon)].saveBeacon(beacon.name, beacon.calibratedRssi)
+        beaconScanner.savedBeacons[beaconScanner.savedBeacons.indexOf(beacon)].saveBeacon(beacon.name, beacon.calibratedRssi, beacon.actionTagIn, beacon.actionTagOut)
     }
 
     fun exit() {

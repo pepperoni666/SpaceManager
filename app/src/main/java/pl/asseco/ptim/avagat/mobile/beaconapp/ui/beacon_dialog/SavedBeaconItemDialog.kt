@@ -10,11 +10,6 @@ import android.view.View
 import pl.asseco.ptim.avagat.mobile.beaconapp.R
 
 class SavedBeaconItemDialog: BeaconItemDialog() {
-    interface SavedDialogCallback {
-        fun saveSaved(name: String, rssi: Double?)
-    }
-
-    private val savedCallback: SavedDialogCallback? = null
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val builder = AlertDialog.Builder(activity)
@@ -41,9 +36,9 @@ class SavedBeaconItemDialog: BeaconItemDialog() {
                             java.lang.Double.parseDouble(holder.beacon_item_dialog_calibrated_rssi_editable.text.toString())
                         if (x >= 0)
                             throw NumberFormatException()
-                        savedCallback!!.saveSaved(holder.beacon_item_dialog_name.text.toString(), x)
+                        callback.saveBeacon(holder.beacon_item_dialog_name.text.toString(), x)
                     } catch (e: NumberFormatException) {
-                        savedCallback!!.saveSaved(holder.beacon_item_dialog_name.text.toString(), null)
+                        callback.saveBeacon(holder.beacon_item_dialog_name.text.toString(), 0.0)
                     }
 
                 }

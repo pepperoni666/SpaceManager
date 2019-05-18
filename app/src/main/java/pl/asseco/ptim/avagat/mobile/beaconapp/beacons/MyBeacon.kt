@@ -35,6 +35,13 @@ class MyBeacon: Beacon {
         return if (emptyScanCount == 10) true else false
     }
 
+    fun saveBeacon(name: String, rssi: Double, actionTagIn: String?, actionTagOut: String?) {
+        this.name = name
+        this.calibratedRssi = rssi
+        this.actionTagIn = actionTagIn
+        this.actionTagOut = actionTagOut
+    }
+
     fun saveBeacon(name: String, rssi: Double) {
         this.name = name
         this.calibratedRssi = rssi

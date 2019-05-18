@@ -31,9 +31,6 @@ class SavedBeaconListFragment: Fragment(), SMApp.CurentFragment, BeaconItemDialo
         if ((activity!!.application as SMApp).beaconScanner.savedBeacons.contains(selectedBeacon)) {
             (activity!!.application as SMApp).updateBeacon(selectedBeacon!!)
         }
-        else {
-            (activity!!.application as SMApp).saveBeacon(selectedBeacon!!)
-        }
         selectedBeacon = null
         dialog?.dismiss()
         dialog = null

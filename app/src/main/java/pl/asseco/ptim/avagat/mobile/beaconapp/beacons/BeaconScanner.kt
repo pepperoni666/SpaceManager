@@ -51,6 +51,10 @@ class BeaconScanner(private val smAppController: SMAppController): Service(), Be
                 for (b in beaconList) {
                     if (!beacns.contains(b as Beacon)) {
                         if (b.isExpired()) {
+                            if(b.isClose){
+                                b.isClose = false
+                                smAppController.beaconStateChange(beaconList[beaconList.indexOf(b)])
+                            }
                             toRem.add(b)
                         }
                     }
@@ -71,7 +75,9 @@ class BeaconScanner(private val smAppController: SMAppController): Service(), Be
                     if (savedBeacons.contains(b)) {
                         beaconList[beaconList.indexOf(b)].saveBeacon(
                             savedBeacons[savedBeacons.indexOf(b)].name,
-                            savedBeacons[savedBeacons.indexOf(b)].calibratedRssi
+                            savedBeacons[savedBeacons.indexOf(b)].calibratedRssi,
+                            savedBeacons[savedBeacons.indexOf(b)].actionTagIn,
+                            savedBeacons[savedBeacons.indexOf(b)].actionTagOut
                         )
                         wasClose = beaconList[beaconList.indexOf(b)].isClose
                     }
