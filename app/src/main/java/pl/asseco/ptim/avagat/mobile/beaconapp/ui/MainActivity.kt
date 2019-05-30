@@ -119,7 +119,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 toolbar.title = getString(R.string.saved_beacons)
             }
             R.id.nav_settings -> {
-                //Logger.log("SavedBeacons-fragment selected")
+                supportFragmentManager.beginTransaction().replace(R.id.fragment_container, SettingsFragment()).commit()
+                Logger.log("Settings-fragment selected")
+                toolbar.title = getString(R.string.settings)
             }
             R.id.nav_stop -> {
                 navigationBiew.menu.findItem(R.id.nav_run).setVisible(true)

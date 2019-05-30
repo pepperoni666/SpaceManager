@@ -10,6 +10,9 @@ import android.widget.Toast
 import org.altbeacon.beacon.*
 import pl.asseco.ptim.avagat.mobile.beaconapp.utils.Logger
 import pl.asseco.ptim.avagat.mobile.beaconapp.utils.SMNotificationManager
+import android.content.SharedPreferences
+import android.support.v7.preference.PreferenceManager
+
 
 class BeaconScanner(private val smAppController: SMAppController): Service(), BeaconConsumer {
 
@@ -39,10 +42,15 @@ class BeaconScanner(private val smAppController: SMAppController): Service(), Be
     }
 
     override fun onBeaconServiceConnect() {
+        val preferences = PreferenceManager.getDefaultSharedPreferences(smAppController.context)
+        val scannPeriod: Long? = preferences.getString("scan_period", "1000").toLongOrNull()
+        if(scannPeriod==null){
+            Toast.makeText(smAppController.context, "Invalid scan period value! Using 1000 ms", Toast.LENGTH_LONG).show()
+        }
         this.beaconManager.backgroundBetweenScanPeriod = 0
-        this.beaconManager.backgroundScanPeriod = 1000
+        this.beaconManager.backgroundScanPeriod = scannPeriod ?: 1000
         this.beaconManager.foregroundBetweenScanPeriod = 0
-        this.beaconManager.foregroundScanPeriod = 1000
+        this.beaconManager.foregroundScanPeriod = scannPeriod ?: 1000
         this.beaconManager.addRangeNotifier { beacons, region ->
                 val beacns: MutableList<Beacon> = mutableListOf()
                 beacns.addAll(beacons)

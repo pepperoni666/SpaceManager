@@ -20,4 +20,11 @@
     <string name="action_on_beacon_entering_close_distance">Action on beacon entering close distance:</string>
     <string name="action_on_beacon_exiting_close_distance">Action on beacon exiting close distance:</string>
     <string name="save">save</string>
+    <string name="scanning_category_name">Scanning</string>
+    <string name="show">show</string>
+    <string name="scan_period_text">Scann period (ms)</string>
+    <string name="enter_scan_period_text">Enter scann period in ms:</string>
+    <string name="scan_period_summary">Period between BLE scanns</string>
+    <string name="loginning_category_name">Loginning</string>
+    <string name="log_to_file_text">Log to file</string>
 </resources>

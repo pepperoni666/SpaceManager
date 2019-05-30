@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <PreferenceCategory android:title="@string/scanning_category_name">
+
+        <!--<CheckBoxPreference
+            android:defaultValue="false"
+            android:key="checkbox_preference"
+            android:title="@string/show" />-->
+
+        <!--android:dependency="checkbox_preference"-->
+        <EditTextPreference
+            android:dialogTitle="@string/enter_scan_period_text"
+            android:key="scan_period"
+            android:defaultValue="1000"
+            android:summary="@string/scan_period_summary"
+            android:title="@string/scan_period_text" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/loginning_category_name">
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="log_to_file"
+            android:title="@string/log_to_file_text" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

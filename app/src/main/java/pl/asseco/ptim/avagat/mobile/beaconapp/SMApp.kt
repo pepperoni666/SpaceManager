@@ -3,12 +3,12 @@ package pl.asseco.ptim.avagat.mobile.beaconapp
 import android.app.Application
 import android.content.Context
 import android.content.Intent
-import android.support.v4.app.Fragment
 import pl.asseco.ptim.avagat.mobile.beaconapp.beacons.BeaconScanner
 import pl.asseco.ptim.avagat.mobile.beaconapp.beacons.MyBeacon
 import pl.asseco.ptim.avagat.mobile.beaconapp.utils.*
 
 class SMApp : Application(), BeaconScanner.SMAppController {
+
     override fun beaconStateChange(beacon: MyBeacon) {
         if(beacon.isClose){
             actions.stateChangedAction(beacon.actionTagIn)
@@ -22,7 +22,7 @@ class SMApp : Application(), BeaconScanner.SMAppController {
         fun notifyDatasetChanged()
     }
 
-    private val logger: Logger = Logger()
+    private lateinit var logger: Logger
     lateinit var beaconScanner: BeaconScanner
     override lateinit var smNotificationManager: SMNotificationManager
     private lateinit var database: DatabaseHandler
@@ -32,6 +32,7 @@ class SMApp : Application(), BeaconScanner.SMAppController {
 
     override fun onCreate() {
         super.onCreate()
+        logger= Logger(this)
         database = DatabaseHandler(this)
         //database.clearDatabase()
         smNotificationManager = SMNotificationManager(this)
