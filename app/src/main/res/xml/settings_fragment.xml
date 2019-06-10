@@ -18,9 +18,23 @@
             android:summary="@string/scan_period_summary"
             android:title="@string/scan_period_text" />
 
+        <EditTextPreference
+            android:dialogTitle="@string/enter_number_of_empty_scans_text"
+            android:key="scans_before_gone"
+            android:defaultValue="10"
+            android:summary="@string/scans_before_gone_summary"
+            android:title="@string/scans_before_gone_text" />
+
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/loginning_category_name">
+    <PreferenceCategory android:title="@string/other_category_name">
+
+        <EditTextPreference
+            android:dialogTitle="@string/enter_calibration_time_text"
+            android:key="beacon_calibration_time"
+            android:defaultValue="30"
+            android:summary="@string/calibration_time_summary"
+            android:title="@string/calibration_time_text" />
 
         <CheckBoxPreference
             android:defaultValue="true"

@@ -3,11 +3,13 @@ package pl.asseco.ptim.avagat.mobile.beaconapp.ui
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.support.v4.app.Fragment
+import android.support.v7.preference.PreferenceManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ListView
+import android.widget.Toast
 import pl.asseco.ptim.avagat.mobile.beaconapp.R
 import pl.asseco.ptim.avagat.mobile.beaconapp.SMApp
 import pl.asseco.ptim.avagat.mobile.beaconapp.beacons.MyBeacon
@@ -17,7 +19,7 @@ import pl.asseco.ptim.avagat.mobile.beaconapp.ui.beacon_list.BeaconListAdapter
 
 class BeaconListFragment : Fragment(), SMApp.CurentFragment, BeaconItemDialog.BeaconDialogCallback {
     override fun deleteSelected() {
-        if((activity!!.application as SMApp).beaconScanner.savedBeacons.contains(selectedBeacon!!)) {
+        if ((activity!!.application as SMApp).beaconScanner.savedBeacons.contains(selectedBeacon!!)) {
             (activity!!.application as SMApp).deleteBeacon(selectedBeacon!!)
         }
         adapter.notifyDataSetChanged()
@@ -30,8 +32,7 @@ class BeaconListFragment : Fragment(), SMApp.CurentFragment, BeaconItemDialog.Be
         selectedBeacon?.saveBeacon(name, rssi)
         if ((activity!!.application as SMApp).beaconScanner.savedBeacons.contains(selectedBeacon)) {
             (activity!!.application as SMApp).updateBeacon(selectedBeacon!!)
-        }
-        else {
+        } else {
             (activity!!.application as SMApp).saveBeacon(selectedBeacon!!)
         }
         selectedBeacon = null
@@ -41,8 +42,14 @@ class BeaconListFragment : Fragment(), SMApp.CurentFragment, BeaconItemDialog.Be
     }
 
     override fun startCalibrating() {
+        val preferences = PreferenceManager.getDefaultSharedPreferences(context)
+        val calibrationTime: Long? = preferences.getString("beacon_calibration_time", "30").toLongOrNull()
+        if (calibrationTime == null) {
+            Toast.makeText(context, "Invalid calibration time! Using 30s", Toast.LENGTH_LONG).show()
+        }
+
         calibrating = true
-        timer = object : CountDownTimer(30000, 1000) {
+        timer = object : CountDownTimer((calibrationTime ?: 30) * 1000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 dialog?.timerTick(millisUntilFinished)
             }
@@ -71,7 +78,7 @@ class BeaconListFragment : Fragment(), SMApp.CurentFragment, BeaconItemDialog.Be
     }
 
     override fun onDialogBuild() {
-        if((activity!!.application as SMApp).beaconScanner.savedBeacons.contains(selectedBeacon!!)){
+        if ((activity!!.application as SMApp).beaconScanner.savedBeacons.contains(selectedBeacon!!)) {
             dialog?.calibrationFinished(selectedBeacon!!.calibratedRssi)
         }
         dialog?.setBeaconData(selectedBeacon!!)
@@ -101,7 +108,7 @@ class BeaconListFragment : Fragment(), SMApp.CurentFragment, BeaconItemDialog.Be
         listView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
             selectedBeacon = (activity!!.application as SMApp).beaconScanner.beaconList[position]
             dialog = BeaconItemDialog()
-            if((activity!!.application as SMApp).beaconScanner.savedBeacons.contains(selectedBeacon!!)){
+            if ((activity!!.application as SMApp).beaconScanner.savedBeacons.contains(selectedBeacon!!)) {
                 dialog = SavedBeaconItemDialog()
             }
             dialog!!.callback = this@BeaconListFragment
@@ -112,15 +119,20 @@ class BeaconListFragment : Fragment(), SMApp.CurentFragment, BeaconItemDialog.Be
     }
 
     override fun notifyDatasetChanged() {
-        if(dialog!=null && selectedBeacon != null){
-            if((activity!!.application as SMApp).beaconScanner.beaconList.contains(selectedBeacon!!)) {
-                dialog?.setBeaconData((activity!!.application as SMApp).beaconScanner.beaconList[(activity!!.application as SMApp).beaconScanner.beaconList.indexOf(selectedBeacon!!)])
-                if(calibrating){
+        if (dialog != null && selectedBeacon != null) {
+            if ((activity!!.application as SMApp).beaconScanner.beaconList.contains(selectedBeacon!!)) {
+                dialog?.setBeaconData(
+                    (activity!!.application as SMApp).beaconScanner.beaconList[(activity!!.application as SMApp).beaconScanner.beaconList.indexOf(
+                        selectedBeacon!!
+                    )]
+                )
+                if (calibrating) {
                     rssiCalibCount++
-                    sumRssiCalib+= (activity!!.application as SMApp).beaconScanner.beaconList[(activity!!.application as SMApp).beaconScanner.beaconList.indexOf(selectedBeacon!!)].rssi!!
+                    sumRssiCalib += (activity!!.application as SMApp).beaconScanner.beaconList[(activity!!.application as SMApp).beaconScanner.beaconList.indexOf(
+                        selectedBeacon!!
+                    )].rssi!!
                 }
-            }
-            else{
+            } else {
                 if (calibrating) {
                     calibrating = false
                     rssiCalibCount = 0

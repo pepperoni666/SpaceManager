@@ -4,9 +4,11 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.support.v7.preference.PreferenceManager
+import android.widget.Toast
 import pl.asseco.ptim.avagat.mobile.beaconapp.beacons.MyBeacon
 
-class DatabaseHandler(context: Context): SQLiteOpenHelper(context, DB_NAME, null, DB_VERSIOM) {
+class DatabaseHandler(private val context: Context): SQLiteOpenHelper(context, DB_NAME, null, DB_VERSIOM) {
     override fun onCreate(db: SQLiteDatabase?) {
         val CREATE_TABLE = "CREATE TABLE $TABLE_NAME " +
                 "($MAC Varchar(20) PRIMARY KEY, $NAME TEXT, $CALIBRATED_RSSI DOUBLE, $ACTION_TAG_IN TEXT, $ACTION_TAG_OUT TEXT, $UUID TEXT, $MAJOR TEXT, $MINOR TEXT)"
@@ -64,9 +66,15 @@ class DatabaseHandler(context: Context): SQLiteOpenHelper(context, DB_NAME, null
         val cursor = db.rawQuery("SELECT * FROM $TABLE_NAME", null)
         val list: MutableList<MyBeacon> = mutableListOf()
         if(cursor!=null && cursor.count>0){
+            val preferences = PreferenceManager.getDefaultSharedPreferences(context)
+            val scansBeforeGone: Int? = preferences.getString("scans_before_gone", "10").toIntOrNull()
+            if(scansBeforeGone==null){
+                Toast.makeText(context, "Invalid number of scans! Using 10 ", Toast.LENGTH_LONG).show()
+            }
             cursor.moveToFirst()
             do {
-                val beacon = MyBeacon(cursor.getString(cursor.getColumnIndex(MAC)),
+                val beacon = MyBeacon(scansBeforeGone?:10,
+                    cursor.getString(cursor.getColumnIndex(MAC)),
                     cursor.getString(cursor.getColumnIndex(UUID)),
                     cursor.getString(cursor.getColumnIndex(MAJOR)),
                     cursor.getString(cursor.getColumnIndex(MINOR)))

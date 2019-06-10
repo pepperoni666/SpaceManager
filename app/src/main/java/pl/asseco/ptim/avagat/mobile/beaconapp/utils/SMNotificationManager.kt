@@ -42,11 +42,11 @@ class SMNotificationManager(private val context:Context) {
             PendingIntent.getActivity(context.applicationContext, 123, Intent(context.applicationContext, MainActivity::class.java), PendingIntent.FLAG_UPDATE_CURRENT)
         val notificationBuilder = NotificationCompat.Builder(context.applicationContext, CHANNEL_ID)
             .setSmallIcon(R.mipmap.ic_launcher) //your app icon
-            .setContentTitle("Title")
+            .setContentTitle("Space Manager is running in the background")
             .setAutoCancel(true)
             .setOngoing(true)
             .setContentIntent(pendingIntent)
-            .setContentText("contect text")
+            //.setContentText("contect text")
             //                .setStyle(new NotificationCompat.BigTextStyle()
             //                        .bigText("text\ntext\ntexttext"))
             .setWhen(System.currentTimeMillis())

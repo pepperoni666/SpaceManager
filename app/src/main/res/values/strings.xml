@@ -25,6 +25,12 @@
     <string name="scan_period_text">Scann period (ms)</string>
     <string name="enter_scan_period_text">Enter scann period in ms:</string>
     <string name="scan_period_summary">Period between BLE scanns</string>
-    <string name="loginning_category_name">Loginning</string>
+    <string name="other_category_name">Other</string>
     <string name="log_to_file_text">Log to file</string>
+    <string name="enter_number_of_empty_scans_text">Enter number of scans before beacon will be gone:</string>
+    <string name="scans_before_gone_summary">Number of scan cycles, before beacon will be considered as gone</string>
+    <string name="scans_before_gone_text">Scan cycles before beacon gone</string>
+    <string name="enter_calibration_time_text">Enter calibration time (s):</string>
+    <string name="calibration_time_text">Beacon calibration time (s)</string>
+    <string name="calibration_time_summary">Time of beacon calibration</string>
 </resources>

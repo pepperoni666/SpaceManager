@@ -19,20 +19,22 @@ class MyBeacon: Beacon {
     var actionTagIn: String? = null
     var actionTagOut: String? = null
 
-    constructor(mac: String, uuid: String, major: String, minor: String):
+    private var scansBeforeGone: Int = 10
+
+    constructor(scansBeforeGone: Int, mac: String, uuid: String, major: String, minor: String):
         super(
             Beacon.Builder()
                 .setBluetoothAddress(mac)
                 .setId1(uuid)
                 .setId2(major)
                 .setId3(minor).build()
-        )
+        ){ this.scansBeforeGone = scansBeforeGone}
 
-    constructor(b: Beacon): super(b)
+    constructor(scansBeforeGone: Int, b: Beacon): super(b) {this.scansBeforeGone = scansBeforeGone}
 
     fun isExpired(): Boolean {
         emptyScanCount++
-        return if (emptyScanCount == 10) true else false
+        return emptyScanCount == scansBeforeGone
     }
 
     fun saveBeacon(name: String, rssi: Double, actionTagIn: String?, actionTagOut: String?) {
