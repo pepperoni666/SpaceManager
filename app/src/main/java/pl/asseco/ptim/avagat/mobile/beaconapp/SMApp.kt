@@ -58,7 +58,8 @@ class SMApp : Application(), BeaconScanner.SMAppController {
     fun deleteBeacon(beacon: MyBeacon){
         Logger.log("Deleting beacon: " + beacon.name)
         database.deleteBeacon(beacon)
-        beaconScanner.beaconList[beaconScanner.beaconList.indexOf(beacon)].removeBeacon()
+        if(beaconScanner.beaconList.contains(beacon))
+            beaconScanner.beaconList[beaconScanner.beaconList.indexOf(beacon)].removeBeacon()
         beaconScanner.savedBeacons.remove(beacon)
     }
 
